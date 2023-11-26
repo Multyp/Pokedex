@@ -19,17 +19,34 @@ const PokemonList = () => {
 
     fetchData();
   }, []);
-
+  
   const Row = ({ index, style }: { index: number, style: React.CSSProperties }) => {
-    const pokemon = pokemonList[index];
+    const [frenchName, setFrenchName] = useState<string>("");
+  
+    useEffect(() => {
+      const fetchData = async () => {
+        try {
+          const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${index + 1}`);
+          const frenchNameInfo = response.data.names.find((nameInfo: any) => nameInfo.language.name === 'fr');
+          const name = frenchNameInfo ? frenchNameInfo.name : "Nom non trouvé en français";
+          setFrenchName(name);
+        } catch (error) {
+          console.error('Error fetching Pokémon:', error);
+        }
+      };
+  
+      fetchData();
+    }, [index]); // Appel de la fonction fetchData à chaque changement de l'index
+  
     return (
       <Link to={`/pokemon/${index + 1}`} style={style}>
         <div className="bg-gray-200 p-4 m-2 rounded-md cursor-pointer hover:bg-gray-300">
-          {pokemon.name}
+          {frenchName}
         </div>
       </Link>
     );
   };
+  
 
   return (
     <div className="container mx-auto p-8">
