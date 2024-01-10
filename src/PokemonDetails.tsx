@@ -7,6 +7,7 @@ interface PokemonDetailsData {
   height: number;
   weight: number;
   abilities: { ability: { name: string } }[];
+  types: { slot: number; type: { name: string; url: string } }[];
 }
 
 const PokemonDetails: React.FC = () => {
@@ -50,6 +51,10 @@ const PokemonDetails: React.FC = () => {
         <p>
           <strong>Abilities:</strong>{' '}
           {pokemonDetails.abilities.map((ability) => ability.ability.name).join(', ')}
+        </p>
+        <p>
+          <strong>Types:</strong>{' '}
+          {pokemonDetails.types.map((type) => type.type.name).join(', ')}
         </p>
       </div>
     </div>

@@ -1,10 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FixedSizeList as List } from 'react-window';
 import axios from 'axios';
 
+function capitalizeFirstChar(inputString: string): string {
+  if (inputString.length === 0) {
+    return inputString;
+  }
+
+  const firstChar = inputString.charAt(0).toUpperCase();
+  const restOfString = inputString.slice(1);
+
+  return firstChar + restOfString;
+}
+
 const PokemonList = () => {
-  const [pokemonList, setPokemonList] = useState<{ name: string, url: string}[]>([]);
+  const [pokemonList, setPokemonList] = useState<{ name: string, url: string }[]>([]);
+  const [pokemonTypes, setPokemonTypes] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -18,6 +29,25 @@ const PokemonList = () => {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    const fetchPokemonTypes = async () => {
+      const typesPromises = pokemonList.map(async (pokemon) => {
+        const response = await axios.get(pokemon.url);
+        return response.data.types;
+      });
+
+      const typesData = await Promise.all(typesPromises);
+
+      const types = typesData.map((type) => type.map((t: any) => t.type.name).join(', '));
+
+      setPokemonTypes(types);
+    };
+
+    if (pokemonList.length > 0) {
+      fetchPokemonTypes();
+    }
+  }, [pokemonList]);
 
   return (
     <div className="container mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
@@ -33,8 +63,8 @@ const PokemonList = () => {
         <tbody>
           {pokemonList.map((pokemon, index) => (
             <tr key={index} className={(index % 2 === 0) ? 'bg-gray-100' : 'bg-white'}>
-              <td className="py-2">{pokemon.name}</td>
-              <td className="py-2">Fetching types...</td>
+              <td className="py-2">{capitalizeFirstChar(pokemon.name)}</td>
+              <td className="py-2">{pokemonTypes[index] || 'Fetching types...'}</td>
               <td className="py-2">
                 <Link to={`/pokemon/${pokemon.name}`} className="text-blue-500 hover:underline">
                   Details
