@@ -1,6 +1,6 @@
-import { Route, Routes, HashRouter } from 'react-router-dom';
-import PokemonList from './PokemonList';
-import PokemonDetails from './PokemonDetails';
+import { Route, Routes, HashRouter } from "react-router-dom";
+import PokemonList from "./PokemonList";
+import PokemonDetails from "./PokemonDetails";
 
 function App() {
   return (

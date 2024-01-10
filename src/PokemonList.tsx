@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import { fetchData, fetchPokemonTypes } from './scripts/DataFetching';
 
 function capitalizeFirstChar(inputString: string): string {
   if (inputString.length === 0) {
@@ -12,42 +12,21 @@ function capitalizeFirstChar(inputString: string): string {
 
   return firstChar + restOfString;
 }
-
 const PokemonList = () => {
   const [pokemonList, setPokemonList] = useState<{ name: string, url: string }[]>([]);
   const [pokemonTypes, setPokemonTypes] = useState<string[]>([]);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=151');
-        setPokemonList(response.data.results);
-      } catch (error) {
-        console.error('Error fetching Pokémon list:', error);
-      }
-    };
+  const updateData = async () => {
+    const data = await fetchData();
+    setPokemonList(data);
 
-    fetchData();
-  }, []);
-
-  useEffect(() => {
-    const fetchPokemonTypes = async () => {
-      const typesPromises = pokemonList.map(async (pokemon) => {
-        const response = await axios.get(pokemon.url);
-        return response.data.types;
-      });
-
-      const typesData = await Promise.all(typesPromises);
-
-      const types = typesData.map((type) => type.map((t: any) => t.type.name).join(', '));
-
+    if (data.length > 0) {
+      const types = await fetchPokemonTypes(data);
       setPokemonTypes(types);
-    };
-
-    if (pokemonList.length > 0) {
-      fetchPokemonTypes();
     }
-  }, [pokemonList]);
+  };
+
+  updateData();
 
   return (
     <div className="container mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
