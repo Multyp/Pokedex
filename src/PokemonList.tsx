@@ -1,5 +1,4 @@
-// PokemonList.js
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { FixedSizeList as List } from 'react-window';
 import axios from 'axios';
@@ -19,46 +18,32 @@ const PokemonList = () => {
 
     fetchData();
   }, []);
-  
-  const Row = ({ index, style }: { index: number, style: React.CSSProperties }) => {
-    const [frenchName, setFrenchName] = useState<string>("");
-  
-    useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const response = await axios.get(`https://pokeapi.co/api/v2/pokemon-species/${index + 1}`);
-          const frenchNameInfo = response.data.names.find((nameInfo: any) => nameInfo.language.name === 'fr');
-          const name = frenchNameInfo ? frenchNameInfo.name : "Nom non trouvé en français";
-          setFrenchName(name);
-        } catch (error) {
-          console.error('Error fetching Pokémon:', error);
-        }
-      };
-  
-      fetchData();
-    }, [index]); // Appel de la fonction fetchData à chaque changement de l'index
-  
-    return (
-      <Link to={`/pokemon/${index + 1}`} style={style}>
-        <div className="bg-gray-200 p-4 m-2 rounded-md cursor-pointer hover:bg-gray-300">
-          {frenchName}
-        </div>
-      </Link>
-    );
-  };
-  
 
   return (
-    <div className="container mx-auto p-8">
-      <h2 className="text-3xl font-semibold mb-4">Pokémon List</h2>
-      <List
-        height={400}
-        itemCount={pokemonList.length}
-        itemSize={60}
-        width={300}
-      >
-        {Row}
-      </List>
+    <div className="container mx-auto my-10 p-6 bg-white rounded-lg shadow-md">
+      <h1 className="text-3xl font-semibold mb-6">Pokémon List</h1>
+      <table className="w-full border-collapse border border-gray-300">
+        <thead>
+          <tr className="bg-blue-500 text-white">
+            <th className="py-2">Name</th>
+            <th className="py-2">Type</th>
+            <th className="py-2">Details</th>
+          </tr>
+        </thead>
+        <tbody>
+          {pokemonList.map((pokemon, index) => (
+            <tr key={index} className={(index % 2 === 0) ? 'bg-gray-100' : 'bg-white'}>
+              <td className="py-2">{pokemon.name}</td>
+              <td className="py-2">Fetching types...</td>
+              <td className="py-2">
+                <Link to={`/pokemon/${pokemon.name}`} className="text-blue-500 hover:underline">
+                  Details
+                </Link>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 };
