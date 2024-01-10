@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import axios from "axios";
 
 interface PokemonDetailsData {
   name: string;
@@ -12,17 +12,18 @@ interface PokemonDetailsData {
 
 const PokemonDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [pokemonDetails, setPokemonDetails] = useState<PokemonDetailsData | null>(null);
+  const [pokemonDetails, setPokemonDetails] =
+    useState<PokemonDetailsData | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.get<PokemonDetailsData>(
-          `https://pokeapi.co/api/v2/pokemon/${id}/`
+          `https://pokeapi.co/api/v2/pokemon/${id}/`,
         );
         setPokemonDetails(response.data);
       } catch (error) {
-        console.error('Error fetching Pokémon details:', error);
+        console.error("Error fetching Pokémon details:", error);
       }
     };
 
@@ -49,12 +50,14 @@ const PokemonDetails: React.FC = () => {
           <strong>Weight:</strong> {pokemonDetails.weight}
         </p>
         <p>
-          <strong>Abilities:</strong>{' '}
-          {pokemonDetails.abilities.map((ability) => ability.ability.name).join(', ')}
+          <strong>Abilities:</strong>{" "}
+          {pokemonDetails.abilities
+            .map(ability => ability.ability.name)
+            .join(", ")}
         </p>
         <p>
-          <strong>Types:</strong>{' '}
-          {pokemonDetails.types.map((type) => type.type.name).join(', ')}
+          <strong>Types:</strong>{" "}
+          {pokemonDetails.types.map(type => type.type.name).join(", ")}
         </p>
       </div>
     </div>

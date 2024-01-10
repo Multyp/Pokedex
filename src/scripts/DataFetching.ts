@@ -1,11 +1,5 @@
-// DataFetching.ts
-
 import axios from "axios";
-
-interface Pokemon {
-  name: string;
-  url: string;
-}
+import type { Pokemon } from "../types/Pokemons";
 
 export const fetchData = async (): Promise<Pokemon[]> => {
   try {
@@ -22,14 +16,14 @@ export const fetchData = async (): Promise<Pokemon[]> => {
 export const fetchPokemonTypes = async (
   pokemonList: Pokemon[],
 ): Promise<string[]> => {
-  const typesPromises = pokemonList.map(async (pokemon) => {
+  const typesPromises = pokemonList.map(async pokemon => {
     const response = await axios.get(pokemon.url);
     return response.data.types;
   });
 
   const typesData = await Promise.all(typesPromises);
 
-  const types = typesData.map((type) =>
+  const types = typesData.map(type =>
     type.map((t: any) => t.type.name).join(", "),
   );
   return types;

@@ -6,8 +6,14 @@ function App() {
   return (
     <HashRouter>
       <Routes>
-        <Route path="/" Component={PokemonList} />
-        <Route path="/pokemon/:id" Component={PokemonDetails} />
+        <Route
+          path="/"
+          Component={PokemonList}
+        />
+        <Route
+          path="/pokemon/:id"
+          Component={PokemonDetails}
+        />
       </Routes>
     </HashRouter>
   );
