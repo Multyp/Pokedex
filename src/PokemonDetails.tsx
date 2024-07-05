@@ -31,34 +31,36 @@ const PokemonDetails: React.FC = () => {
   }, [id]);
 
   if (!pokemonDetails) {
-    return <div>Loading...</div>;
+    return <div className="text-white">Loading...</div>;
   }
 
   return (
-    <div className="container mx-auto p-8">
-      <h2 className="text-3xl font-semibold mb-4">{pokemonDetails.name}</h2>
-      <img
-        src={`https://img.pokemondb.net/artwork/avif/${pokemonDetails.name}.avif`}
-        alt={pokemonDetails.name}
-        className="mx-auto"
-      />
-      <div className="mt-4">
-        <p>
-          <strong>Height:</strong> {pokemonDetails.height}
-        </p>
-        <p>
-          <strong>Weight:</strong> {pokemonDetails.weight}
-        </p>
-        <p>
-          <strong>Abilities:</strong>{" "}
-          {pokemonDetails.abilities
-            .map(ability => ability.ability.name)
-            .join(", ")}
-        </p>
-        <p>
-          <strong>Types:</strong>{" "}
-          {pokemonDetails.types.map(type => type.type.name).join(", ")}
-        </p>
+    <div className="p-5 bg-slate-900 flex items-center justify-center flex-col h-max min-h-screen">
+      <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
+        <h2 className="text-4xl font-bold mb-4 text-center capitalize">{pokemonDetails.name}</h2>
+        <img
+          src={`https://img.pokemondb.net/artwork/avif/${pokemonDetails.name}.avif`}
+          alt={pokemonDetails.name}
+          className="mx-auto w-64 h-64 object-contain"
+        />
+        <div className="mt-4 text-center">
+          <p className="text-xl">
+            <strong className="font-semibold">Height:</strong> {pokemonDetails.height / 10} m
+          </p>
+          <p className="text-xl">
+            <strong className="font-semibold">Weight:</strong> {pokemonDetails.weight / 10} kg
+          </p>
+          <p className="text-xl">
+            <strong className="font-semibold">Abilities:</strong>{" "}
+            {pokemonDetails.abilities
+              .map(ability => ability.ability.name)
+              .join(", ")}
+          </p>
+          <p className="text-xl">
+            <strong className="font-semibold">Types:</strong>{" "}
+            {pokemonDetails.types.map(type => type.type.name).join(", ")}
+          </p>
+        </div>
       </div>
     </div>
   );
